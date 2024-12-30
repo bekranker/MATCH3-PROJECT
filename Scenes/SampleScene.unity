@@ -580,7 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad1b0f8bf0bf4ab7bed2aff82cd8b17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _GridSize: {x: 4, y: 4}
+  _GridSize: {x: 24, y: 2}
   _CellPrefab: {fileID: 8107616000664871366, guid: 47862bced364840459db9f4bccebdd42, type: 3}
   _Pool: {fileID: 323296172}
   _RPCam: {fileID: 519420033}
