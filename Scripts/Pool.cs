@@ -14,17 +14,17 @@ public class Pool : MonoBehaviour
         {
             _pool = new();
 
-            instiante = Object.Instantiate(prefab);
+            instiante = Instantiate(prefab);
             return instiante;
         }
-        else if (_pool.TryPeek(out GameObject instiante2))
+        else if (_pool.TryPop(out GameObject popedObject))
         {
-            GameObject tempPoolItem = _pool.Pop();
+            GameObject tempPoolItem = popedObject;
             return tempPoolItem;
         }
         else
         {
-            instiante = Object.Instantiate(prefab);
+            instiante = Instantiate(prefab);
             return instiante;
         }
     }
