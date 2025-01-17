@@ -9,6 +9,7 @@ public class Pool<T> where T : MonoBehaviour
 
     private Dictionary<string, PoolIdentifier<T>> PoolDict => _poolCustomDictionary.ToDictionary();
 
+    //this function will spawn all items by givin string key from dictionary and giving count.
     public void SpawnAllDictionary(string key, int count)
     {
         PoolDict[key].Init(PoolDict[key].ItemType, count);
@@ -34,7 +35,7 @@ public class Pool<T> where T : MonoBehaviour
             poolDict[key] = new PoolIdentifier<T>();
         }
 
-        poolDict[key].AddToPool(value);
+        poolDict[key].AddToQueue(value);
         _poolCustomDictionary.FromDictionary(poolDict);
     }
 }
@@ -48,11 +49,13 @@ public class PoolIdentifier<T> where T : MonoBehaviour
     [SerializeField] private Transform _parent;
     public T ItemType => _itemType;
 
+
+    //Initializing the queue of pool's item
     public void Init(T itemType, int count)
     {
         if (_parent == null)
         {
-            _parent = new GameObject(ItemType.name).transform;
+            _parent = new GameObject($"------{ItemType.name}------").transform;
         }
         Count = count;
         _itemType = itemType;
@@ -61,12 +64,13 @@ public class PoolIdentifier<T> where T : MonoBehaviour
 
     public void SpawnItems()
     {
+        //if there is no item that defined break function;
         if (_itemType == null)
         {
             Debug.LogError("Item type is not initialized. Call Init() before spawning items.");
             return;
         }
-
+        //Spawning Count times
         for (int i = 0; i < Count; i++)
         {
             T tempCreated = Object.Instantiate(_itemType);
@@ -77,7 +81,7 @@ public class PoolIdentifier<T> where T : MonoBehaviour
         }
     }
 
-    public void AddToPool(T value)
+    public void AddToQueue(T value)
     {
         value.gameObject.SetActive(false);
         Items.Enqueue(value);

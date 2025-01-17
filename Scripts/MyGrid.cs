@@ -4,18 +4,22 @@ using UnityEngine;
 public class MyGrid : MonoBehaviour
 {
     [Header("---Props")]
+    [Tooltip("This is level size for X and Y dimensions.")]
     [SerializeField] private Vector2Int _GridSize;
+    [Tooltip("Please drag and drop Cell prefab in the Prefab Folder.")]
     [SerializeField] private GameObject _CellPrefab;
-    [SerializeField] private GameObject _ItemPrefabTriangle, _ItemPrefabSquare, _ItemPrefabCircle;
     [Header("---Components")]
-    [field: SerializeField] private Pool<Item> _Pool;
+    [Tooltip("This is Pool variable. It is handling the cell Insiante and etc.")]
+    [field: SerializeField] private Pool<Cell> _Pool;
+    [Tooltip("Please Drag and drop Camera")]
     [SerializeField] private ResponsiveCamera _RPCam;
     [Header("---Assets")]
+    [Tooltip("Please Drag and drop all Default Sprites that will be use")]
     [SerializeField] private List<Sprite> _sprites = new();
 
     void Start()
     {
-        _Pool.SpawnAllDictionary("Grid", (_GridSize.x * _GridSize.y) * 2);
+        _Pool.SpawnAllDictionary($"{Constants.Cell_Key}", (_GridSize.x * _GridSize.y) * 2);
         SetGrid();
     }
 
@@ -30,9 +34,9 @@ public class MyGrid : MonoBehaviour
             for (int x = 1; x <= _GridSize.x; x++)
             {
                 xPlus += 1.25f;
-                Item tempGrid = _Pool.GetPoolObject("Grid");
-                tempGrid.Init(_sprites[Random.Range(0, _sprites.Count)], new Vector2Int(x, y));
-                SetPos(new Vector2(x + xPlus, y + yPlus), tempGrid.transform);
+                Cell tempCell = _Pool.GetPoolObject($"{Constants.Cell_Key}");
+                tempCell.Init(_sprites[Random.Range(0, _sprites.Count)], new Vector2Int(x, y));
+                SetPos(new Vector2(x + xPlus, y + yPlus), tempCell.transform);
                 cellIndex++;
             }
             xPlus = 0;

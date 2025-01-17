@@ -13,7 +13,7 @@ public class ResponsiveCamera : MonoBehaviour
         float gridHeight = gridSize.y * 2.5f;
         float gridWidth = gridSize.x * 2.5f;
 
-        // Ekranın en-boy oranını hesaplıyoruz
+        // Calculating ratio of the screen
         float aspectRatio = (float)Screen.width / Screen.height;
 
         float sizeByHeight = gridHeight / 2f;

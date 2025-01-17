@@ -1,9 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IClickableObject
+public class Cell : MonoBehaviour, IClickableObject
 {
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    public CellType CellType;
     private Vector2Int _gridPos;
+    public List<Cell> Neighboors;
+    public bool HasAnyMatch
+    {
+        get { return true; }
+        set { }
+    }
     public void OnClick()
     {
         Debug.Log("Clicked");
