@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//this is a custom Dictionary for showing in the Inspector
 [Serializable]
 public class SerializableDictionary<TKey, TValue>
 {
+
+    //tihs part is the our Dictionary Value's and Key's structer
     [Serializable]
     public struct KeyValue
     {
@@ -12,13 +16,15 @@ public class SerializableDictionary<TKey, TValue>
         public TValue Value;
     }
 
+    //tihs part is the Dictionary
     [SerializeField]
-    private List<KeyValue> _entries = new List<KeyValue>();
+    private List<KeyValue> ItemsOfDictionary = new List<KeyValue>();
 
     public Dictionary<TKey, TValue> ToDictionary()
     {
-        var dict = new Dictionary<TKey, TValue>();
-        foreach (var entry in _entries)
+        Dictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
+
+        foreach (KeyValue entry in ItemsOfDictionary)
         {
             if (!dict.ContainsKey(entry.Key))
             {
@@ -27,13 +33,12 @@ public class SerializableDictionary<TKey, TValue>
         }
         return dict;
     }
-
+    //its taking values from a giving dictionary to our custom dicitonary.
     public void FromDictionary(Dictionary<TKey, TValue> dict)
     {
-        _entries.Clear();
-        foreach (var kvp in dict)
+        foreach (KeyValuePair<TKey, TValue> kvp in dict)
         {
-            _entries.Add(new KeyValue { Key = kvp.Key, Value = kvp.Value });
+            ItemsOfDictionary.Add(new KeyValue { Key = kvp.Key, Value = kvp.Value });
         }
     }
 }

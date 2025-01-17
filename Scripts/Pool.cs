@@ -2,23 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Pool<T> where T : Object
+public class Pool<T> where T : MonoBehaviour
 {
     [field: SerializeField]
-    private SerializableDictionary<string, PoolIdentifier<T>> _poolDictionary = new SerializableDictionary<string, PoolIdentifier<T>>();
+    private SerializableDictionary<string, PoolIdentifier<T>> _poolCustomDictionary = new SerializableDictionary<string, PoolIdentifier<T>>();
 
-    private Dictionary<string, PoolIdentifier<T>> PoolDict => _poolDictionary.ToDictionary();
+    private Dictionary<string, PoolIdentifier<T>> PoolDict => _poolCustomDictionary.ToDictionary();
 
-    public void SpawnAllDictionary()
+    public void SpawnAllDictionary(string key, int count)
     {
-        var poolDict = PoolDict;
-        foreach (var item in poolDict)
-        {
-            item.Value.Init(item.Value.ItemType);
-            item.Value.SpawnItems();
-        }
+        PoolDict[key].Init(PoolDict[key].ItemType, count);
     }
-
+    public PoolIdentifier<T> GetPool(string key) => PoolDict[key];
     public T GetPoolObject(string key)
     {
         var poolDict = PoolDict;
@@ -40,21 +35,26 @@ public class Pool<T> where T : Object
         }
 
         poolDict[key].AddToPool(value);
-        _poolDictionary.FromDictionary(poolDict);
+        _poolCustomDictionary.FromDictionary(poolDict);
     }
 }
 
 [System.Serializable]
-public class PoolIdentifier<T> where T : Object
+public class PoolIdentifier<T> where T : MonoBehaviour
 {
-    private Queue<T> _items = new();
+    public Queue<T> Items = new();
     [field: SerializeField] private T _itemType;
-    [field: SerializeField] private int _count = 1;
-
+    public int Count { get; set; }
+    [SerializeField] private Transform _parent;
     public T ItemType => _itemType;
 
-    public void Init(T itemType)
+    public void Init(T itemType, int count)
     {
+        if (_parent == null)
+        {
+            _parent = new GameObject(ItemType.name).transform;
+        }
+        Count = count;
         _itemType = itemType;
         SpawnItems();
     }
@@ -67,13 +67,25 @@ public class PoolIdentifier<T> where T : Object
             return;
         }
 
-        for (int i = 0; i < _count; i++)
+        for (int i = 0; i < Count; i++)
         {
             T tempCreated = Object.Instantiate(_itemType);
-            _items.Enqueue(tempCreated);
+            tempCreated.transform.SetParent(_parent);
+            tempCreated.gameObject.SetActive(false);
+            Items.Enqueue(tempCreated);
+
         }
     }
 
-    public void AddToPool(T value) => _items.Enqueue(value);
-    public T GetObject() => _items.Dequeue();
+    public void AddToPool(T value)
+    {
+        value.gameObject.SetActive(false);
+        Items.Enqueue(value);
+    }
+    public T GetObject()
+    {
+        T temp = Items.Dequeue();
+        temp.gameObject.SetActive(true);
+        return temp;
+    }
 }

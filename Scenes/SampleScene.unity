@@ -201,7 +201,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 1}
+  m_BackGroundColor: {r: 0.13207549, g: 0.04672482, b: 0.04672482, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71897b83702a4924a478b3582f9e851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MainCamera: {fileID: 519420031}
+  _mainCamera: {fileID: 519420031}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,44 +404,20 @@ MonoBehaviour:
   _ItemPrefabSquare: {fileID: 3329570267076126163, guid: 21c43a7f2f4aa444ca30f3a5684447ce, type: 3}
   _ItemPrefabCircle: {fileID: 6718600869647341908, guid: 73bbf450328f043a5ae0ba671de6adba, type: 3}
   _Pool:
-    _poolDictionary:
-      _entries:
+    _poolCustomDictionary:
+      ItemsOfDictionary:
       - Key: Grid
         Value:
           _itemType: {fileID: -5635225233420323122, guid: 47862bced364840459db9f4bccebdd42, type: 3}
-          _count: 24
+          _parent: {fileID: 0}
   _RPCam: {fileID: 519420033}
---- !u!1 &1656775428
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1656775429}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1656775429
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656775428}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7555783, y: -0.15150085, z: -0.022342551}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  _sprites:
+  - {fileID: -4624011131410558117, guid: c41ca4a6184a045059c8de620c4ad1d8, type: 3}
+  - {fileID: -7364823422338184377, guid: 9e8519c87e59447f180000cf943c4bde, type: 3}
+  - {fileID: 742919511911846744, guid: 0d8319a6292a441af9319bcb19235fa3, type: 3}
+  - {fileID: 8161472552560778960, guid: 7e70b954c338840a09685da50f1b7cb8, type: 3}
+  - {fileID: 887387325851772620, guid: f890e0f4a6f8f4f5f869fa372a5a9dfb, type: 3}
+  - {fileID: 7985042018138347892, guid: e3fb265c4b79c40319a614d08e0d0587, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -449,4 +425,3 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1395896173}
-  - {fileID: 1656775429}
