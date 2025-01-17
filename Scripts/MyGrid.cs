@@ -7,7 +7,7 @@ public class MyGrid : MonoBehaviour
     [SerializeField] private GameObject _CellPrefab;
     [SerializeField] private GameObject _ItemPrefabTriangle, _ItemPrefabSquare, _ItemPrefabCircle;
     [Header("---Components")]
-    [SerializeField] private Pool _Pool;
+    [field: SerializeField] private Pool<Item> _Pool;
     [SerializeField] private ResponsiveCamera _RPCam;
 
 
@@ -16,6 +16,8 @@ public class MyGrid : MonoBehaviour
 
     void Start()
     {
+
+        _Pool.SpawnAllDictionary();
         SetGrid();
     }
 
@@ -34,7 +36,7 @@ public class MyGrid : MonoBehaviour
                 indexX++;
                 _cells[cellIndex] = new Vector2Int(indexX, indexY);
                 xPlus += 1.5f;
-                GameObject tempGrid = _Pool.GetFromPool(_CellPrefab);
+                Item tempGrid = _Pool.GetPoolObject("Grid");
                 SetPos(new Vector2(x + xPlus, y + yPlus), tempGrid.transform);
                 cellIndex++;
             }
