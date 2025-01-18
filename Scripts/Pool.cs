@@ -4,17 +4,34 @@ using UnityEngine;
 [System.Serializable]
 public class Pool<T> where T : MonoBehaviour
 {
+    /// <summary>
+    /// our custom Dictionary for showing in the inspector
+    /// </summary>
     [field: SerializeField]
     private SerializableDictionary<string, PoolIdentifier<T>> _poolCustomDictionary = new SerializableDictionary<string, PoolIdentifier<T>>();
 
     private Dictionary<string, PoolIdentifier<T>> PoolDict => _poolCustomDictionary.ToDictionary();
 
-    //this function will spawn all items by givin string key from dictionary and giving count.
+    /// <summary>
+    /// this function will spawn all items by givin string key from dictionary with giving count.
+    /// </summary>
+    /// <param name="key">Dictionary key</param>
+    /// <param name="count">how many wants to spawn ?</param>
     public void SpawnAllDictionary(string key, int count)
     {
         PoolDict[key].Init(PoolDict[key].ItemType, count);
     }
+    /// <summary>
+    /// returning the pool Object/s
+    /// </summary>
+    /// <param name="key">Dictionary Key</param>
+    /// <returns></returns>
     public PoolIdentifier<T> GetPool(string key) => PoolDict[key];
+    /// <summary>
+    /// returning Pool object by giving key
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>return T type object element</returns>
     public T GetPoolObject(string key)
     {
         var poolDict = PoolDict;
@@ -26,7 +43,11 @@ public class Pool<T> where T : MonoBehaviour
 
         return poolDict[key].GetObject();
     }
-
+    /// <summary>
+    /// Adding items to the pool
+    /// </summary>
+    /// <param name="key">Dictionary Key</param>
+    /// <param name="value">the items will be added</param>
     public void AddToPool(string key, T value)
     {
         var poolDict = PoolDict;

@@ -19,13 +19,17 @@ public class MyGrid : MonoBehaviour
 
     void Start()
     {
+        //Initialing the pool for our Cells that will be use, count is the grid area length.
         _Pool.SpawnAllDictionary($"{Constants.Cell_Key}", (_GridSize.x * _GridSize.y) * 2);
         SetGrid();
     }
 
-    //The reason we added 1.5f is because Cell covers the Sprite in 1.5f space. Its durability (i.e. xPlus on X, yPlus on Y) should be increased by 1.5f for each axis and added to the current cell bead.
+    /// <summary>
+    /// Creating the grid
+    /// </summary>
     void SetGrid()
     {
+        //The reason we added 1.5f is because Cell covers the Sprite in 1.5f space. Its durability (i.e. xPlus on X, yPlus on Y) should be increased by 1.5f for each axis and added to the current cell bead.
         int cellIndex = 0;
         float yPlus = 0, xPlus = 0;
         for (int y = 1; y <= _GridSize.y; y++)
@@ -41,9 +45,15 @@ public class MyGrid : MonoBehaviour
             }
             xPlus = 0;
         }
+        //Responsive Camera
         _RPCam.SetCamPosAndSize(_GridSize);
 
     }
+    /// <summary>
+    /// Changing the position of spawned Cell
+    /// </summary>
+    /// <param name="currentCellPos">target position</param>
+    /// <param name="cellT">current position of the giving cell</param>
     void SetPos(Vector2 currentCellPos, Transform cellT)
     {
         cellT.position = currentCellPos;
