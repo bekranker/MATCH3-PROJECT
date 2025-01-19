@@ -4,7 +4,10 @@ public class ResponsiveCamera : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
     private const float _minOrthographicSize = 7f;
-    //It is the responsive function;
+    /// <summary>
+    /// It is the responsive function;
+    /// </summary>
+    /// <param name="gridSize"></param>
     public void SetCamPosAndSize(Vector2Int gridSize)
     {
         Vector3 tempPos = new Vector3((gridSize.x * 2.5f) / 2, (gridSize.y * 2.5f) / 2, -10);

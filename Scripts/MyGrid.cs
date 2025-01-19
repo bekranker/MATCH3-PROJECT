@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MyGrid : MonoBehaviour
 {
     [Header("---Props")]
     [Tooltip("This is level size for X and Y dimensions.")]
-    [SerializeField] private Vector2Int _GridSize;
+    [SerializeField] private Vector2Int _gridSize;
     [Tooltip("Please drag and drop Cell prefab in the Prefab Folder.")]
     [SerializeField] private GameObject _CellPrefab;
     [Header("---Components")]
@@ -17,46 +18,75 @@ public class MyGrid : MonoBehaviour
     [Tooltip("Please Drag and drop all Default Sprites that will be use")]
     [SerializeField] private List<Sprite> _sprites = new();
 
+    private Cell[][] _cellsGrid;
+
     void Start()
     {
+        _cellsGrid = new Cell[_gridSize.y][];
+        for (int i = 0; i < _gridSize.y; i++)
+        {
+            _cellsGrid[i] = new Cell[_gridSize.x];
+        }
         //Initialing the pool for our Cells that will be use, count is the grid area length.
-        _Pool.SpawnAllDictionary($"{Constants.Cell_Key}", (_GridSize.x * _GridSize.y) * 2);
+        _Pool.SpawnAllDictionary($"{Constants.Cell_Key}", (_gridSize.x * _gridSize.y) * 2);
         SetGrid();
     }
 
     /// <summary>
     /// Creating the grid
     /// </summary>
-    void SetGrid()
+    private void SetGrid()
     {
-        //The reason we added 1.5f is because Cell covers the Sprite in 1.5f space. Its durability (i.e. xPlus on X, yPlus on Y) should be increased by 1.5f for each axis and added to the current cell bead.
+        BlockColor[] selectedBlockColor = (BlockColor[])System.Enum.GetValues(typeof(BlockColor));
         int cellIndex = 0;
-        float yPlus = 0, xPlus = 0;
-        for (int y = 1; y <= _GridSize.y; y++)
+        for (int y = 0; y < _gridSize.y; y++)
         {
-            yPlus += 1.25f;
-            for (int x = 1; x <= _GridSize.x; x++)
+            for (int x = 0; x < _gridSize.x; x++)
             {
-                xPlus += 1.25f;
                 Cell tempCell = _Pool.GetPoolObject($"{Constants.Cell_Key}");
-                tempCell.Init(_sprites[Random.Range(0, _sprites.Count)], new Vector2Int(x, y));
-                SetPos(new Vector2(x + xPlus, y + yPlus), tempCell.transform);
+                int randomColor = Random.Range(0, selectedBlockColor.Count());
+                tempCell.MyNode.BlockColor = selectedBlockColor[randomColor];
+                tempCell.Init(_sprites[randomColor], new Vector2Int(x, y), _gridSize);
                 cellIndex++;
+                _cellsGrid[y][x] = tempCell;
             }
-            xPlus = 0;
         }
-        //Responsive Camera
-        _RPCam.SetCamPosAndSize(_GridSize);
-
+        SetPosition(Vector2Int.zero);
+        // Responsive Camera
+        _RPCam.SetCamPosAndSize(_gridSize);
     }
-    /// <summary>
-    /// Changing the position of spawned Cell
-    /// </summary>
-    /// <param name="currentCellPos">target position</param>
-    /// <param name="cellT">current position of the giving cell</param>
-    void SetPos(Vector2 currentCellPos, Transform cellT)
+    private void SetPosition(Vector2Int startPosition)
     {
-        cellT.position = currentCellPos;
-    }
+        float plusY = 0;
+        float plusX = 0;
 
+
+        for (int y = startPosition.y; y < _gridSize.y; y++)
+        {
+            plusY += 1.2f;
+            for (int x = startPosition.x; x < _gridSize.x; x++)
+            {
+                plusX += 1.25f;
+                if (x > 0) // Left Neighboor
+                {
+                    _cellsGrid[y][x].SetNeighboor(ref _cellsGrid[y][x].MyNode.Left, _cellsGrid[y][x - 1].MyNode);
+                }
+                if (x < _gridSize.x - 1) // Right Neighboor
+                {
+                    _cellsGrid[y][x].SetNeighboor(ref _cellsGrid[y][x].MyNode.Right, _cellsGrid[y][x + 1].MyNode);
+                }
+                if (y > 0) // Down Neighboor
+                {
+                    _cellsGrid[y][x].SetNeighboor(ref _cellsGrid[y][x].MyNode.Down, _cellsGrid[y - 1][x].MyNode);
+                }
+                if (y < _gridSize.y - 1) // Up Neighboor
+                {
+                    _cellsGrid[y][x].SetNeighboor(ref _cellsGrid[y][x].MyNode.Up, _cellsGrid[y + 1][x].MyNode);
+                }
+                _cellsGrid[y][x].SetPosition(new Vector2Int(x, y), new Vector2(x + plusX, y + plusY));
+
+            }
+            plusX = 0;
+        }
+    }
 }
